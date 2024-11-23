@@ -4,7 +4,7 @@ We propose Latent Gaussian Compression (LGC), a novel method for efficient cross
 
 ## Introduction
 
-Edit
+Edit test hello
 
 Machine learning for cross-modal data representation benefits from efficient encoding schemes that retain essential information while supporting fast retrieval and seamless data transfer between domains. Our Latent Gaussian Compression (LGC) framework applies Variational Autoencoders (VAEs) with Gaussian Mixture Model (GMM) latent spaces, Locality Sensitive Hashing (LSH), and Information Bottleneck (IB) regularization to achieve efficient compression, particularly in the context of cross-modal applications such as IR and RGB data fusion.
 
