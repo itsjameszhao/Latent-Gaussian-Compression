@@ -40,9 +40,9 @@ Suppose we have a dataset $D = \{Cat, Dog\}$ with two classes and we want to tra
 
 - **The Problem**:
   - Cannot store or transmit full dataset $D$ because of
-    - Network bandwidth constraints.
+    - Network bandwidth constraints
     - Space constraints
-    - Privacy constraints.
+    - Privacy constraints
 - Can we share compressed dataset $D'$ instead?
 
 --- 
@@ -51,7 +51,7 @@ Suppose we have a dataset $D = \{Cat, Dog\}$ with two classes and we want to tra
 ![w:700 center](../diagrams/network_diagram.png)
 
 ---
-# **Dataset Assumptions**
+# **Workflow**
 
 ![w:1200 center](../diagrams/flow_diagram.png)
 
@@ -59,13 +59,10 @@ Suppose we have a dataset $D = \{Cat, Dog\}$ with two classes and we want to tra
 
 # **Gaussian Mixture Modeling**
 
-- Map original data in $R^n (A, B)$ to simpler latent space $R^l (A', B')$ where $k << n$.
+- Map original data in $R^n (A, B)$ to simpler latent space $R^l (A', B')$ where $l << n$.
 - We can approximate the class distributions using **Gaussian Mixture Models (GMMs)**:
-  - Represent each class distribution $C' \in (A', B')$ as linear combinations of Gaussian distributions:
+  - Represent each class distribution $C' \in (A', B')$ as linear combinations of $k$ Gaussian distributions:
 
 $$
 P(z) = \sum_{i=1}^k \pi_i \mathcal{N}(\mu_{k_{C'}}, \Sigma_{k_{C'}}), \quad z \in R^l
 $$
-
----
-[![Watch the video](https://img.youtube.com/vi/<PLLssT5z_DsK9JDLcT8T62VtzwyW9LNepV/hqdefault.jpg)](https://www.youtube.com/embed/PLLssT5z_DsK9JDLcT8T62VtzwyW9LNepV)

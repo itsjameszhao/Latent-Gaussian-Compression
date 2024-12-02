@@ -12,13 +12,10 @@ style: |
 
 # **Visualizing GMM Distribution Learning**
 
-| ![w:1000 center](https://mpatacchiola.github.io/blog/images/gmm_nll_k2_k5_new.png) | 
-|:--:| 
-| *Image from mpatacchiola.github.io* |
+![w:600 center](../pics/gmm/gmm.png)
 
-
-- The image shows the learning of Gaussian Mixture Models (GMMs) with different numbers of clusters ($k=2$ and $k=5$).
-- **GMM Objective**:
-  - Learn the parameters $\mu_k$ and $\Sigma_k$ to best fit the data distributions.
+- The image shows the learning of a Gaussian Mixture Model (GMMs) with two components ($k=2$).
+- The distribution is a linear combination of the two components:
+$$p(z) = \pi_1 \mathcal{N}(\mu_1, \Sigma_1) + \pi_2 \mathcal{N}(\mu_2, \Sigma_2)$$
 
 ---
