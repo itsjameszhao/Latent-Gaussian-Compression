@@ -114,7 +114,3 @@ def reconstruction_loss(x, x_hat):
 ![Centered Image](../pics/AE/bic_curves.png)
 
 ---
-
-# **BIC Loss**
-$$ \frac{1}{2}$$
-

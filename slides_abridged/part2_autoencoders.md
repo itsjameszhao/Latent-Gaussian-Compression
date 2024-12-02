@@ -20,6 +20,18 @@ $$p(z) = \pi_1 \mathcal{N}(\mu_1, \Sigma_1) + \pi_2 \mathcal{N}(\mu_2, \Sigma_2)
 
 ---
 
+# Compression with Autoencoders and GMMs
+
+![w:240 center](../diagrams/autoencoder.png)
+
+---
+
+# Compression Step
+
+![w:900 center](../diagrams/usage.png)
+
+---
+
 # **VAE Loss Function**
 
 
@@ -36,3 +48,10 @@ $$
 L_{\text{KL}} = D_{\text{KL}}(q(z|x) || p(z))
 $$
 
+---
+
+# **BIC Curve**
+
+![Centered Image](../pics/AE/bic_curves.png)
+
+$$ \text{BIC} = k \ln(n) - 2 \ln(\widehat{L}) $$
