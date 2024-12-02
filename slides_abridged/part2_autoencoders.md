@@ -19,3 +19,20 @@ style: |
 $$p(z) = \pi_1 \mathcal{N}(\mu_1, \Sigma_1) + \pi_2 \mathcal{N}(\mu_2, \Sigma_2)$$
 
 ---
+
+# **VAE Loss Function**
+
+
+The VAE loss combines two terms:
+1. **Reconstruction Loss**:
+
+$$
+L_{\text{recon}}(x, \hat{x}) = ||x - \hat{x}||^2
+$$
+
+2. **KL Divergence** (regularizer):
+
+$$
+L_{\text{KL}} = D_{\text{KL}}(q(z|x) || p(z))
+$$
+
