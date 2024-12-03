@@ -1,34 +1,40 @@
 ---
 marp: true
-theme: gaia
+theme: beam
 math: mathjax
 
 ---
+# **Baseline Comparison**
+As a baseline comparison for the performance, subsets of size equal to the compressed model were extracted from the MNIST dataset
+- Gradient-Based Clustering
+- Random Subset Selection
 
-# **Clusters**
-
-![Centered Image](../pics/submodular_maximization/sel_clusters.png)
+Each model was evaluated using a CNN classifier
+<!-- ![bg right height:3in](../pics/submodular_maximization/example_size.png) -->
 
 ---
 
-# **Gradient-Based Clustering**
+# **Gradient-Based Exemplar Clustering**
 
-The optimization problem is:
+![bg right height:4in](../pics/submodular_maximization/GradientClusters.png)
+
+
+
+Optimization problem:
 
 $$
 \arg \min_{S, \gamma_j \geq 0} |S| \quad \text{s.t.} \quad \max_{w \in W} ||\nabla_w F(w, V) - \nabla_w F(w, S)|| \leq \epsilon
 $$
 
 ---
+# **Baseline Results**
+Test Accuracy of GBEC on the 10000 test images: 85.68%
+![left height:5in](../pics/submodular_maximization/sm_confusion_matrix.png)
 
-# **Greedy Algorithms**
 
-1. **Subset Selection**:
 
-$$
-F(S_k) \geq \left(1 - \frac{1}{e}\right) F(\text{OPT})
-$$
+---
 
-2. **Complexity**:
+# **GMM Compression Results**
 
-- Time Complexity: $O(nk)$.
+![left height:5in](../pics/AE/ae_confusion_matrix.png)

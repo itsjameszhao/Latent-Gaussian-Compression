@@ -25,6 +25,8 @@
 
 
 ## Parts 4 and 5 (2 min) (middle)
+- Baseline comparisons
+    - CNN Classifier
 - Clusters
     - Explain training method
     - Explain VAE gradient extraction
