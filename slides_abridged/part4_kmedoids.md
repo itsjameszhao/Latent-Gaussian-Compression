@@ -10,7 +10,7 @@ As a baseline comparison for the performance, subsets of size equal to the compr
 - Random Subset Selection
 
 Each model was evaluated using a CNN classifier
-![bg right height:4.5in](../pics/submodular_maximization/example_size.png)
+![bg right height:4.5in](../pics/submodular_maximization/)
 
 ---
 
