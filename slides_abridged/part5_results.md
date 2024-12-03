@@ -5,19 +5,19 @@ math: mathjax
 
 ---
 
-# **Our Results**
+# Our Results
 
 ![center height:5in](../pics/AE/ae_confusion_matrix.png)
 
 ---
 
-# **Baseline Comparison**
+# Baseline Comparison
 
 ![center height:5in](../pics/submodular_maximization/sm_confusion_matrix.png)
 
 ---
 
-# **References**
+# References
 Bishop, Christopher M., and Nasser M. Nasrabadi. Pattern recognition and machine learning. Vol. 4. No. 4. New York: springer, 2006.
 
 Hinton, Geoffrey E., and Ruslan R. Salakhutdinov. "Reducing the dimensionality of data with neural networks." science 313.5786 (2006): 504-507.
