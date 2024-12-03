@@ -26,12 +26,6 @@ $$p(z) = \pi_1 \mathcal{N}(\mu_1, \Sigma_1) + \pi_2 \mathcal{N}(\mu_2, \Sigma_2)
 - I want to put this text to the left of the 
 ---
 
-## Compression Step
-
-![w:900 center](../diagrams/usage.png)
-
----
-
 ## VAE Loss Function
 
 
