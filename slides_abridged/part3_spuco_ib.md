@@ -45,7 +45,7 @@ Where:
 
 ---
 
-# **Vanilla VAE Reconstruction With Upsampling**
+# **Vanilla VAE Reconstruction (With Upsampling)**
 
 ![](./../pics/spuco/upsampling%20slide.png)
 
