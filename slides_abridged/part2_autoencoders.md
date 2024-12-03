@@ -66,6 +66,6 @@ $$
 ## Bayesian Information Criterion (BIC) Curve
 - BIC metric is used to determine the appropriate number of k GMMs to decompose into to represent the latent distribution
 - The below plots show the BIC plots for each class's distribution, each showing that 2 to 3 GMMs satisfy the criterion of model simplicity and goodness-of-fit
-![Centered Image](../pics/AE/bic_curves.png)
+![Centered Image](../pics/AE/ae_bic_curves.png)
 
 $$ \text{BIC} = k \ln(n) - 2 \ln(\widehat{L}) $$
