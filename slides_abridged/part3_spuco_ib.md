@@ -5,16 +5,16 @@ math: mathjax
 
 ---
 
-# **Information Bottleneck Principle**
+# Information Bottleneck Principle
 
 - A theoretical framework for compression in neural networks.
 - Balances:
-  - **Compression**: Reduce information from $x$ to $z$.
-  - **Relevance**: Ensure $z$ retains information about $y$.
+  - Compression: Reduce information from $x$ to $z$.
+  - Relevance: Ensure $z$ retains information about $y$.
 
 ---
 
-# **Objective of Information Bottleneck**
+# Objective of Information Bottleneck
 
 Minimize the following loss:
 
@@ -29,7 +29,7 @@ Where:
 
 ---
 
-# **Connection Between VAEs and Information Bottleneck**
+# Connection Between VAEs and Information Bottleneck
 
 - VAEs implicitly optimize an information bottleneck objective.
 - KL Divergence term in VAEs regularizes the latent space.

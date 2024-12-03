@@ -9,7 +9,7 @@ style: |
     }
 ---
 
-# **Introduction**
+# Introduction
 
 ## Latent Gaussian Compression
 
@@ -34,33 +34,40 @@ Presentation:
 ---
 
 
-# **Problem Setup**
+# Problem Setup
 
 Suppose we have a dataset $D = \{Cat, Dog\}$ with two classes and we want to train a classifier.
 
-- **The Problem**:
+- The Problem:
   - Cannot store or transmit full dataset $D$ because of
     - Network bandwidth constraints
     - Space constraints
     - Privacy constraints
-- Can we share compressed dataset $D'$ instead?
+- Can we share compressed dataset $D'$ (equivalent to coreset $S_k$) instead?
 
 --- 
-# **Problem Assumptions**
+# Problem Assumptions
 
 ![w:700 center](../diagrams/network_diagram.png)
 
 ---
-# **Workflow**
+# Workflow
 
 ![w:1200 center](../diagrams/flow_diagram.png)
 
 ---
 
-# **Gaussian Mixture Modeling**
+# Sequence Diagram
+
+![w:900 center](../diagrams/usage.png)
+
+
+---
+
+# Gaussian Mixture Modeling
 
 - Map original data in $R^n (A, B)$ to simpler latent space $R^l (A', B')$ where $l << n$.
-- We can approximate the class distributions using **Gaussian Mixture Models (GMMs)**:
+- We can approximate the class distributions using Gaussian Mixture Models (GMMs):
   - Represent each class distribution $C' \in (A', B')$ as linear combinations of $k$ Gaussian distributions:
 
 $$
