@@ -10,7 +10,7 @@ As a baseline comparison for the performance, subsets of size equal to the compr
 - Random Subset Selection
 
 Each model was evaluated using a CNN classifier
-![bg right height:4.5in](../pics/submodular_maximization/)
+![bg right height:4.5in](../pics/submodular_maximization/example_size.png)
 
 ---
 
@@ -47,6 +47,11 @@ $$
 ### Auto-Encoder
 - Test Accuracy on the 10000 test images: 
 ![bg right height:5in](../pics/AE/ae_confusion_matrix.png) 
+
+---
+
+# Overall Results: Compression vs Accuracy 
+![center height:5in](../pics/general/compression_vs_accuracy.png) 
 
 ---
 # References
