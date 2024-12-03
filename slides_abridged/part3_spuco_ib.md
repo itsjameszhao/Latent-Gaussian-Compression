@@ -14,9 +14,9 @@ math: mathjax
 
 ---
 
-# **Objective of Information Bottleneck**
+# **Connection Between VAEs and Information Bottleneck**
 
-Minimize the following loss:
+- VAEs implicitly optimize an information bottleneck objective by minimizing the following loss:
 
 $$
 \mathcal{L} = I(x; z) - \beta I(z; y)
@@ -29,7 +29,34 @@ Where:
 
 ---
 
-# **Connection Between VAEs and Information Bottleneck**
+# **Spurious Correlations**
 
-- VAEs implicitly optimize an information bottleneck objective.
-- KL Divergence term in VAEs regularizes the latent space.
+---
+
+# **Spuco Dataset (Large Spurious Feature Difficulty)**
+
+![w:700 center](./../pics/spuco/dataset.png)
+
+---
+
+# **Vanilla VAE Reconstruction (No Upsampling)**
+
+![](./../pics/spuco/no%20upsampling%20slide.png)
+
+---
+
+# **Vanilla VAE Reconstruction With Upsampling**
+
+![](./../pics/spuco/upsampling%20slide.png)
+
+---
+
+# **Convolutional VAE Reconstruction (No Upsampling)**
+
+![](./../pics/spuco/conv%20no%20upsampling%20slide.png)
+
+---
+
+# **Convolutional VAE Reconstruction (With Upsampling)**
+
+![](./../pics/spuco/conv%20upsampling%20slide.png)
