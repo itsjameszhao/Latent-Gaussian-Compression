@@ -10,29 +10,29 @@ style: |
 
 ---
 
-# **Visualizing GMM Distribution Learning**
+## Visualizing GMM Distribution Learning
 
 ![w:600 center](../pics/gmm/gmm.png)
 
 - The image shows the learning of a Gaussian Mixture Model (GMMs) with two components ($k=2$).
-- The distribution is a linear combination of the two components:
+- The distribution is a linear combination of the two components, but can be any integer number of components:
 $$p(z) = \pi_1 \mathcal{N}(\mu_1, \Sigma_1) + \pi_2 \mathcal{N}(\mu_2, \Sigma_2)$$
 
 ---
 
-# Compression with Autoencoders and GMMs
+## Compression with Autoencoders and GMMs
 
-![w:240 center](../diagrams/autoencoder.png)
-
+![bg right:50% w:240](../diagrams/autoencoder.png)
+- I want to put this text to the left of the 
 ---
 
-# Compression Step
+## Compression Step
 
 ![w:900 center](../diagrams/usage.png)
 
 ---
 
-# **VAE Loss Function**
+## VAE Loss Function
 
 
 The VAE loss combines two terms:
@@ -42,7 +42,7 @@ $$
 L_{\text{recon}}(x, \hat{x}) = ||x - \hat{x}||^2
 $$
 
-2. **KL Divergence** (regularizer):
+2. **KL Divergence (regularizer)**:
 
 $$
 L_{\text{KL}} = D_{\text{KL}}(q(z|x) || p(z))
@@ -50,7 +50,7 @@ $$
 
 ---
 
-# **BIC Curve**
+## BIC Curve
 
 ![Centered Image](../pics/AE/bic_curves.png)
 
