@@ -45,7 +45,7 @@ $$
 
 # GMM Compression Results
 ### Auto-Encoder
-- Test Accuracy on the 10000 test images: 
+- Test Accuracy on the 10000 test images: 95.98%
 ![bg right height:5in](../pics/AE/ae_confusion_matrix.png) 
 
 ---
