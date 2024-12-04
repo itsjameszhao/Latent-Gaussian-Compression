@@ -1,78 +1,97 @@
-# Latent Gaussian Compression for Efficient Cross-Modal Data Representation
+# Latent Gaussian Compression: Dataset Compression and Reconstruction with Autoencoders and Gaussian Mixture Models
 
-We propose Latent Gaussian Compression (LGC), a novel method for efficient cross-modal data representation using Variational Autoencoders (VAEs) with Gaussian Mixture Model (GMM) latent spaces, Locality Sensitive Hashing (LSH), and Information Bottleneck (IB) principles. LGC achieves efficient compression by organizing the latent space to support locality preservation and smoothness, balancing accuracy and compression through controlled mutual information retention. This approach is well-suited for multi-modal applications, such as infrared-to-RGB mapping, vision-augmented IR superresolution, and privacy-preserving surveillance. LGC achieves high-fidelity representation and efficient retrieval with a significant reduction in data requirements.
+## Abstract
+This report explores a machine learning-based approach for compressing and reconstructing large-scale image datasets. We combine autoencoders and Gaussian Mixture Models (GMMs) to create a compact, efficient representation that preserves key features for classification. We evaluate the effectiveness of this approach (Latent Gaussian Compression - LGC) by comparing the performance of a classifier trained on reconstructed data to the original dataset. To establish a strong baseline, we compared our approach to coreset selection with k-medoids. Additionally, we experimented with various autoencoder architectures (vanilla autoencoder, VAE, conditional VAE, contrastive VAE, and AE) to optimize performance. We further validated our method on the SpuCo (spurious correlation) dataset to assess its robustness to spurious correlations.
 
-## Introduction
+## 1. Introduction
 
-Edit test hello
+Traditional compression methods may discard information crucial for machine learning tasks. This project leverages autoencoders and generative models to achieve a balance between compression factor and classification performance.
 
-Machine learning for cross-modal data representation benefits from efficient encoding schemes that retain essential information while supporting fast retrieval and seamless data transfer between domains. Our Latent Gaussian Compression (LGC) framework applies Variational Autoencoders (VAEs) with Gaussian Mixture Model (GMM) latent spaces, Locality Sensitive Hashing (LSH), and Information Bottleneck (IB) regularization to achieve efficient compression, particularly in the context of cross-modal applications such as IR and RGB data fusion.
+![w:700 center](../diagrams/network_diagram.png)
 
-This paper presents an approach to compress and represent data by balancing accuracy and storage efficiency in the latent space. LGC enables the generation of high-fidelity representations of multi-modal data while significantly reducing data transmission requirements, supporting applications in privacy-preserving surveillance, autonomous navigation, and efficient streaming.
+**Motivation:** In many real-world scenarios, researchers need to share large datasets for collaborative research or machine learning model training. However, sharing raw data can pose significant challenges due to privacy concerns, bandwidth limitations, and storage costs. Our Latent Gaussian Compression (LGC) scheme provides a solution to these challenges by enabling efficient and privacy-preserving data sharing.
 
-### Overview of Latent Gaussian Compression
+Consider a scenario where two researchers, Researcher 1 and Researcher 2, collaborate on a machine learning project. Researcher 1 has trained a model M on a large dataset D. Researcher 2 wants to train a similar model M' on a similar dataset D', but they are constrained by limited bandwidth and privacy concerns.
 
-LGC leverages VAEs with GMMs to model complex, multi-modal distributions in the latent space. By combining the Information Bottleneck principle with contrastive learning and LSH-based initialization, our approach achieves a structured latent space that preserves locality and minimizes information redundancy.
+Using LGC, Researcher 1 can compress and anonymize their dataset D into a compressed representation D'. This compressed representation can be transmitted over the network to Researcher 2 with minimal bandwidth overhead. Researcher 2 can then decompress D' and use it to train their model M'.
 
-### Contributions
+By using LGC, researchers can benefit from reduced bandwidth consumption, enhanced privacy, efficient data sharing, and improved model performance. LGC addresses the challenges of data sharing, enabling collaboration and innovation in machine learning research.
 
-Our primary contributions include:
+**Contribution:** We investigate the effectiveness of LGC for dataset compression and reconstruction. We explore different autoencoder architectures (vanilla, VAE) and incorporate submodular maximization for data selection. The project investigates the trade-off between compression and performance and proposes theoretical guarantees for information retention.
 
-- A novel approach for cross-modal latent space organization using VAEs with GMM latent representations, preserving multi-modal features for efficient cross-domain transfer.
-- Integration of Information Bottleneck regularization to control the trade-off between compression and accuracy, retaining critical information for high-quality reconstruction.
-- Implementation of LSH for locality-preserving retrieval, facilitating efficient and quick cross-modal transformations.
-- Application to real-world use cases, including IR-to-RGB superresolution and privacy-preserving surveillance.
+## 2. Related Work
 
-## Latent Gaussian Compression Framework
+Autoencoders have been used for dimensionality reduction and feature learning in various applications [1]. Variational Autoencoders (VAE) introduce a probabilistic framework for learning latent representations [2]. GMMs are employed for density estimation and data modeling [3]. Submodular maximization techniques have been explored for efficient data selection [4].
 
-### VAE-GMM Architecture
 
-The VAE-GMM framework models data with a Gaussian Mixture Model in the latent space. Each sample \(x\) is mapped to a distribution in latent space by the encoder as:
 
-$$ z \sim q(z|x) = \mathcal{N}(\mu(x), \sigma(x)^2) $$
+## 3. Methodology
 
-where \(z\) represents the latent vector, and \(\mu(x)\) and \(\sigma(x)\) denote the mean and variance.
+The project is divided into the following stages:
 
-The GMM prior is defined as:
+### Autoencoder Compression
 
-$$ p(z) = \sum_{k=1}^K \pi_k \mathcal{N}(z|\mu_k, \Sigma_k) $$
+An autoencoder is trained to compress images into a lower-dimensional latent space.
 
-where \(\pi_k\), \(\mu_k\), and \(\Sigma_k\) denote the weight, mean, and covariance of each Gaussian component \(k\).
+### Part 2: Latent Space Distribution Learning with GMMs
+A GMM is fitted to the latent representations to capture the underlying distribution.
 
-### Locality Sensitive Hashing for Latent Space Initialization
+### Selecting the Optimal Number of Components for GMMs
 
-We utilize LSH for efficient clustering and retrieval. By hashing similar inputs to nearby codes in the latent space, we ensure that similar data points map to similar clusters, enhancing retrieval efficiency.
+Determining the optimal number of components (K) in a Gaussian Mixture Model (GMM) is crucial for achieving accurate and robust modeling. In this work, we employed the Bayesian Information Criterion (BIC) to select the appropriate number of components for each class in our dataset. 
 
-### Information Bottleneck Regularization
+The BIC score is a statistical criterion that balances model fit with model complexity. It is defined as:
 
-The Information Bottleneck (IB) objective balances compression and accuracy by optimizing:
+$$ \text{BIC} = k \ln(n) - 2 \ln(\widehat{L}) $$
 
-\[
-\mathcal{L}_{\text{IB}} = I(X; Z) - \beta I(Z; Y)
-\]
+where:
 
-where \(I(X; Z)\) represents the information retained from input \(X\), and \(I(Z; Y)\) denotes the information relevant for reconstructing \(Y\). The parameter \(\beta\) modulates this trade-off.
+- `log-likelihood`: The log-likelihood of the data given the model.
+- `k`: The number of parameters in the model.
+- `n`: The number of data points.
 
-## Applications and Results
+A lower BIC score indicates a better model fit. By comparing BIC scores for different values of K, we can identify the optimal number of components that balances model complexity and predictive accuracy.
 
-Our approach achieves notable improvements in compression efficiency and retrieval speed in cross-modal applications. Specifically, we apply LGC to enhance IR-to-RGB transformations, demonstrating how vision-augmented superresolution can improve the quality of IR data.
+For each class in our dataset, we trained GMMs with a varying number of components (K) and calculated their corresponding BIC scores. The BIC scores were then plotted against the number of components, resulting in the curves shown in Figure 1. The optimal number of components for each class was selected as the value of K that minimized the BIC score.
 
-### Infrared-to-RGB Superresolution
+By carefully selecting the number of components using the BIC criterion, we ensured that our GMMs effectively captured the underlying data distribution without overfitting or underfitting. This optimal model selection is crucial for accurate data compression and reconstruction.
 
-LGC enables high-resolution IR reconstruction by mapping low-resolution IR data to the RGB domain. Through efficient compression and retrieval, we generate RGB-enhanced IR outputs that provide greater detail than IR data alone.
+* **Part 3: Dataset Transportation and Reconstruction:** Samples are drawn from the learned GMM and decoded to reconstruct new images.
+* **Part 4: Dataset Reconstruction and Training:** A classifier is trained on the reconstructed dataset and evaluated for performance comparison.
+* **Part 5: Comparison to Submodular Maximization for Dataset Summarization:** Explores submodular maximization for data selection before applying LGC.
 
-### Privacy-Preserving Surveillance
+## 4. Experiments and Results
 
-The latent space compression achieved by LGC allows for privacy-sensitive IR imaging, as it enables thermal data representation without revealing detailed visual content. This is ideal for privacy-preserving applications in sensitive environments.
 
-## Conclusion
+![w:700 center](../pics/general/compression_vs_accuracy.png)
 
-Latent Gaussian Compression provides an efficient framework for cross-modal data representation, achieving significant compression while retaining essential features. This approach is adaptable across various domains and applicable to fields that require data-efficient, high-quality cross-modal transformations, such as autonomous driving, surveillance, and remote sensing.
+We evaluated the performance of our Latent Gaussian Compression (LGC) approach against several baseline methods, including GZIP compression, random subsetting, gradient-based subset selection, and coreset selection with k-medoids. We experimented with various autoencoder architectures (vanilla, VAE, conditional VAE, contrastive VAE, and contrastive VAE with convex hull boundary) within the LGC framework. Our results, illustrated in the figure above, demonstrate a compelling trade-off between compression ratio and test accuracy. 
 
-## Appendix
+LGC consistently outperformed baseline methods, especially at higher compression ratios. While coreset selection with k-medoids offered reasonable performance, LGC generally provided superior accuracy, particularly at higher compression levels. 
 
-Additional technical details and experimental results can be included here.
+However, it's important to note that all methods experienced a significant drop in accuracy at extremely high compression ratios. This highlights the inherent trade-off between compression and performance.
 
-## References
 
-References are formatted using the ICLR 2021 conference style.
+In conclusion, our LGC approach offers a promising solution for compressing large-scale datasets while preserving essential information for downstream tasks. Further research can explore more advanced autoencoder architectures and optimization techniques to further improve the performance of LGC.
+
+## 5. Conclusion
+
+This project investigates the feasibility of LGC for dataset compression and reconstruction. We explore various techniques and analyze the trade-off between compression rate and classification performance. 
+
+## 6. Future Work
+
+Future work includes exploring:
+
+* Integration of contrastive learning to enhance latent space structure.
+* Incorporation of GMM structured priors for complex latent distributions.
+* Derivation of theoretical guarantees for information retention as a function of the compression ratio.
+
+## 7. References
+
+  * [1] Hinton, G. E., & Salakhutdinov, R. R. (2006). Reducing the dimensionality of data with neural networks. Science, 313(5786), 504-507.
+  * [2] Kingma, D. P., & Welling, M. (2013). Auto-encoding variational 1  inference. arXiv preprint arXiv:1312.6114.
+  * [3] Bishop, C. M. (2006). Pattern recognition and machine learning. Springer.
+
+## 8. Appendix
+
+TODO
