@@ -1,6 +1,5 @@
 ---
 marp: true
-theme: beam
 math: mathjax
 style: |
     img[alt~="center"] {
@@ -9,9 +8,7 @@ style: |
     }
 ---
 
-# Introduction
-
-## Latent Gaussian Compression
+# Latent Gaussian Compression
 
 James Zhao, Blaine Arihara, Emily Tang, Terry Weber
 
@@ -51,13 +48,14 @@ Suppose we have a dataset $D = \{Cat, Dog\}$ with two classes and we want to tra
 ![w:700 center](../diagrams/network_diagram.png)
 
 ---
-# Workflow
+# Existing Approaches
 
-![w:1200 center](../diagrams/flow_diagram.png)
+![w:1200 center](../diagrams/dataset_summarization.png)
+- Select subset $S*$ and obtain a $\frac{|V|}{|S*|}$ speedup and compression factor
 
 ---
 
-# Sequence Diagram
+# Workflow
 
 ![w:900 center](../diagrams/usage.png)
 
