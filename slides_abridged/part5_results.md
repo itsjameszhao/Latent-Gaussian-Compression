@@ -5,18 +5,6 @@ math: mathjax
 
 ---
 
-# Our Results
-
-![center height:5in](../pics/AE/ae_confusion_matrix.png)
-
----
-
-# Baseline Comparison
-
-![center height:5in](../pics/submodular_maximization/sm_confusion_matrix.png)
-
----
-
 # References
 Bishop, Christopher M., and Nasser M. Nasrabadi. Pattern recognition and machine learning. Vol. 4. No. 4. New York: springer, 2006.
 
