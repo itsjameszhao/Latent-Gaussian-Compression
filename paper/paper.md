@@ -29,7 +29,11 @@ Our contribution is that we implement several variants of LGC with different aut
 Autoencoders have been used for dimensionality reduction and feature learning in various applications [1]. Variational Autoencoders (VAE) introduce a probabilistic framework for learning latent representations [2]. GMMs are employed for density estimation and data modeling [3]. Submodular maximization techniques have been explored for efficient data selection [4].
 
 ### CRUST-based Coreset Selection
+<<<<<<< HEAD
 One particular technique that we aim to compare LGC against is a CRUST-like compression algorithm. This algorithm clusters points together in the gradient space and then uses k-medoids to select the most central coreset points in the gradient space. It aims to find a coreset $S*$ that minimizes the following objective:
+=======
+One particular technique that we aim to compare LGC against is a CRUST-like compression algorithm. This algorithm clusters points together in the gradient space and then uses k-medoidsto select the most central coreset points in the gradient space. It aims to find a coreset $S*$ that minimizes the following objective:
+>>>>>>> 714c5a3e75fc2b8134896620d18c7c2e92e34187
 
 $$ S*(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$ 
 
@@ -45,6 +49,7 @@ There are three stages to our LGC algorithm: a compression stage, a transport ph
 ### Compression Phase
 In the compression phase, an autoencoder, which can be either a vanilla autoencoder or any of the variants we experiment with below, can be used. We divide the MNIST dataset into two parts, test and train, and train the autoencoder on the test portion. The encoder part of the autoencoder maps input images to latent vectors, while the decoder reconstructs the original images from the latent vectors.
 
+<<<<<<< HEAD
 **Autoencoder Architectures:**
 
 The vanilla and variant autoencoder architectures that were experimented with for this project are listed and described below:
@@ -60,6 +65,14 @@ Next, the latent vectors obtained from the encoder part of the autoencoder are u
 
 $$p(z) = \sum{k=1}^K \pi_k \mathcal{N}(x | \mu_k, \Sigma_k)$$
 
+=======
+TODO chart of different autoencoders and their properties
+
+Next, the latent vectors obtained from the encoder part of the autoencoder are used to fit a GMM. The GMM models the distribution of latent representations as a mixture of Gaussian components according to the following probability density function:
+
+$$p(z) = \sum{k=1}^K \pi_k \mathcal{N}(x | \mu_k, \Sigma_k)$$
+
+>>>>>>> 714c5a3e75fc2b8134896620d18c7c2e92e34187
 where:
 
 - `K`: Number of mixture components.
