@@ -155,6 +155,25 @@ Future work includes exploring:
 * Incorporation of GMM structured priors for complex latent distributions.
 * Derivation of theoretical guarantees for information retention as a function of the compression ratio.
 
+One thing we looked into was how our approach would handle spurious correlations by training the autoencoder component of our pipeline on the SpucoMNIST dataset, setting each digit to be highly correlated to different background colors, as opposed to the black and white MNIST images. What we found was that the basic autoencoder in our pipeline did not handle spurious correlations very well, and would associate the background colors more than the features of the digits during reconstruction.
+
+We found using a convolutional architecture helped with this and we got better results (See Figure A1 for a diagram of the architecture used).
+
+
+<table>
+  <tr>
+    <th>Vanilla VAE Reconstruction</th>
+    <th>Convolutional VAE Reconstruction</th>
+  </tr>
+  <tr>
+    <td><img src="./../pics/spuco/column1.png" width="200"></td>
+    <td><img src="./../pics/spuco/column2.png" width="200"></td>
+  </tr>
+  
+</table>
+
+The usage of convolutional architecture is not a new idea and dates back to the Lenet architecture from the 1998 paper, which was used to read zip codes and other digits (4). It was reported that convolutional networks “ensure some degree of shift, scale, and distortion invariance”, which would have a similar effect to performing augmentations on the data in preprocessing and training on a sequential network (5). From this paper it is known that convolutional networks are not sensitive to “shifts and distortions of the input” and that “once a feature has been detected, its exact location becomes less important”(5). These features contribute to the robustness of convolutional networks for image recognition, and help mitigate spurious correlations in training. For future work, integrating a convolutional VAE could enable this architecture to be generalized and used for different sets of even more complex images, even those containing a high degree of spurious correlations. 
+
 ## 7. References
 
 TODO add a more comprehensive list of references to both here and the paper
@@ -162,7 +181,12 @@ TODO add a more comprehensive list of references to both here and the paper
   * [1] Hinton, G. E., & Salakhutdinov, R. R. (2006). Reducing the dimensionality of data with neural networks. Science, 313(5786), 504-507.
   * [2] Kingma, D. P., & Welling, M. (2013). Auto-encoding variational 1  inference. arXiv preprint arXiv:1312.6114.
   * [3] Bishop, C. M. (2006). Pattern recognition and machine learning. Springer.
+  * [4] “Convolutional Neural Networks (CNNs / ConvNets).” CS231n Convolutional Neural Networks for Visual Recognition Course Website, Stanford https://cs231n.github.io/convolutional-networks/, 12-1-2024.
+  * [5] Y. Lecun, L. Bottou, Y. Bengio and P. Haffner, "Gradient-based learning applied to document recognition," in Proceedings of the IEEE, vol. 86, no. 11, pp. 2278-2324, Nov. 1998, doi: 10.1109/5.726791.
+
 
 ## 8. Appendix
 
 TODO add all visualizations from our codebase that are relevant
+<br>Figure A1
+<br><img src="./../pics/spuco/convvae.png">
