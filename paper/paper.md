@@ -30,18 +30,17 @@ Our contribution is that we implement several variants of LGC with different aut
 
 Autoencoders have been used for dimensionality reduction and feature learning in various applications [1]. Variational Autoencoders (VAE) introduce a probabilistic framework for learning latent representations [2]. GMMs are employed for density estimation and data modeling [3]. Submodular maximization techniques have been explored for efficient data selection [4].
 
-### 2.1 Coreset Selection
-To compare the performance of LGC, a CRUST-like data summarization technique was used to find an optimal subset for training. This algorithm projects the data in graident space, utilizing a k-medoids++ algorithm to find a coreset that minimizes the following objective: 
+### 2.1 CRUST 
+To compare the performance of LGC, a CRUST-like data summarization technique was used to find an optimal subset for training. CRUST is a robust coreset selection algorithm for neural networks. Selecting a set of medoids from the gradient space eliminates noisy labels, as clean data with similar gradients will cluster together, resulting in a noise robust summarization of the dataset. This algorithm aims to find a coreset that minimizes the following objective: 
 
 $$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$ 
-<!-- TODO: verify that this equation is correct (emily) -->
-where $d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||^2$ is the Euclidean distance between the gradients of data points $x_i$ and $x_j$ with respects to the model parameters $W$.
+
+
+where $d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||_2$ is the Euclidean distance between the gradients of data points $x_i$ and $x_j$ with respects to the model parameters $W$.
 
 One issue with a gradient-based coreset selection approach for training is that this can be computationally expensive when scaled. This technique often requires the extraction of the gradients of thousands of parameters per data point. For example, an autoencoder can have on the order of $10^5$ trainable parameters, each of which has a corresponding gradient, and it is computationally infeasible to extract and cluster a $10^5$-dimensional space for the $50,000$ training points in our MNIST dataset. 
 
 In contrast, a LGC algorithm offers a less computationally expensive solution to dataset summarization, mapping individual data points into a simple 64-dimensional latent space on which a small number of GMMs can be fitted. By modeling the distribution using GMMs, LGC can scale up or down the compression factor as the complexity of the dataset dictates simply by changing the number of Gaussian components per GMMs, and can learn a wide variety of non-Gaussian distributions.
-
-
 
 ## 3. Methodology
 
@@ -63,7 +62,8 @@ The vanilla and variant autoencoder architectures that were experimented with fo
   - The mean squared error (MSE) reconstruction loss is used to train the model such that the averaged squared errors between the reconstructed image and the original image is minimized.
   $$MSE = \frac{1}{n}\sum_{i=1}^{n} (y_i - \hat{y_i})^2$$
   - t-Distributed Stochastic Neighbor Embedding (tSNE) is a dimensional reduction technique that attempts to preserve higher dimensional structure in a lower dimension typically for visualization. The tSNE plot below is a 2-dimensional visualization of the 64-dimensional latent vectors of the 10 classes of the MNIST dataset color-coded by class. It can seen that the encoder is transforming examples of the same class in roughly similar locations in latent space, while placing examples from different classes in different locations in latent space. This plot gives the intution of the latent encodings of different classes that the GMM is attempting to decompose into multiple gaussian distributions.
-![w:500 center](../pics/AE/ae_tsne2.png)
+
+![w:500 center](../pics/AE/ae_tsne.png)
 
 - **Variational Autoencoder (VAE)**
   - The variational autoencoder (VAE) is a probabilistic extension of the vanilla autoencoder (AE) that replaces the determinstic functionality of the encoder and decoder of an AE with probability distributions. The AE compresses a single image into a latent representation, and then reconstructs an image from that latent. The VAE takes a single image and learns a continuous probability distribution for its latent representation. This probability distribution is modeled as a normal distribution characterized by means and covariances with dimensions that of the latent dimension. Two neural networks comprise the encoder, where one learns how to represent the means of input images and the other learns how to represent the covariances of the input images. Knowing the mean and covariance of a normal distribution allows the distribution to be known entirely, so when an image is encoded by its means and covariances, it is encoded as a latent space probability distribution. To decode the image from its latent, a random sample can be drawn from the distribution that has mean and covariance determined by the neural networks applied to that image. The sample will then get passed through two more sets of neural networks that will map the latent into normal distributions of what the images look like. Similar to the encoder, the decoder is comprised of two neural networks, one which takes the sampled latent representation and determines its means in image space, and the other which determines its covariances in image space. These determined means and covariances describe the image space probability distribution of the latent, from which a random sample can be drawn to return a reconstructed image.
@@ -144,19 +144,19 @@ By carefully selecting the number of components using the BIC criterion, we ensu
 <!-- WIP -->
 <!-- TODO: Include background on CNN classifier -->
 
-A Convolutional Neural Network (CNN) classifier is used to evaluate the performance of our models. To compare the performance of the LGC, a data summarization method was used to select an optimal subset for training. Each autoencoder explored resulted in a compressed representation varying between 1-3 MB in size. Taking an equivalent number of examples, a subset of 182 examples was extracted from the training dataset.
+A Convolutional Neural Network (CNN) classifier is used to evaluate the performance of each model. As a baseline comparison, a subset selection data summarization technique was implemented. Each autoencoder explored resulted in a compressed representation varying between 1-3 MB in size. A subset of 182 examples were extracted from the training data, the equivalent to 3MB of data when GZipped. Results were also compared to a random subset selection.
 
 <!-- TODO idk if this figure is necessary, TBD -->
 ![w:500 center](../pics/submodular_maximization/example_size.png)
 
-To optimize this subset, a CRUST-like approach was implemented. CRUST is a robust coreset selection algorithm for neural networks. Selecting a set of medoids from based from the gradient space eliminates noisy labels as clean data with similar gradients will cluster together. For neural networks, the gradient of the loss of the last layer of the network captures the variation of the gradient norms. 
+To optimize this subset, a CRUST-like approach was implemented by training a neural network to extract the gradients of the loss from the last layer of the network, which has been shown to capture the most variation of the gradient norms. After training the neural network, the gradients were projected into a lower dimensional space such that each image could be represented in gradient space, while a k-medoids++ algorithm was implemented to select an optimal coreset.
+
+In this implementation, the autoencoders were used as the neural networks for uncovering representative gradients. The last layer gradients retrieved were 28x28 representations, matching each pixel of an image. These gradients were reduced to a 64-dimensional latent space with Singular Value Decomposition (SVD) before being projected down to 2 dimensions for visualization and clustering. The success of this method in creating useful clusters varied with the autoencoder selected. Figure (!TODO) demostrates the resulting projection of a gradient space using the VAE. 
+
 <!-- (!! CITE THESE
 https://cs.stanford.edu/people/jure/pubs/crust-neurips20.pdf
 https://arxiv.org/abs/1803.00942
 ) -->
-
-<!-- TODO: incorporate steps here to extracting the gradients -->
-
 
 ![w:500 center](../pics/submodular_maximization/GradientClusters.png)
 
