@@ -208,7 +208,7 @@ https://arxiv.org/abs/1803.00942
 <!-- TODO add more conent and pictures to experiments section -->
 
 ### 4.1 Compression Ratio
-This LGC approach returns a packaged representation of the dataset fitted GMM (mean vectors, covariance matrices, and component weights) and the decoder part of the autoencoder to be used for image reconstruction and training. Using a GZip compression, the MNIST dataset can be reduced to about 82% of its original size. With the autoencoder architecture, the size of the dataset can be reduced by nearly 96.13% in size while achieving a 97.85% accuracy on the original MNIST dataset.
+This LGC approach returns a packaged representation of the dataset fitted GMM (mean vectors, covariance matrices, and component weights) and the decoder part of the autoencoder to be used for image reconstruction and training. Using a GZip compression, the MNIST dataset can be reduced to 82.34% of its original size. With the autoencoder architecture, the size of the dataset can be reduced by nearly 95.98% in size while achieving a 97.85% accuracy on the original MNIST dataset.
 
 | Approach                            |   Percent reduction |   Test accuracy |
 |:------------------------------------|--------------------:|----------------:|
