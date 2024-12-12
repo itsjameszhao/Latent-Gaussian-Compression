@@ -2,18 +2,7 @@
 
 James Zhao, Blaine Arihara, Emily Tang, and Terry Weber
 
-## TODO
-- Link code to Git repo
-  - Upload all the models/tools
-  - Upload subset selection notebook
-
-- Finish the conclusion
-  - Summarize accuracy
-  - maybe add confusion matrices to appendix
-
-- Subset selection methods
-  - Finish attempt on CNN
-
+--- Overleaf link: https://www.overleaf.com/9441718858cjvkmxjfshfm#3a0a87
 
 ## Abstract
 This report explores a machine learning-based approach for compressing and reconstructing large-scale image datasets. We combine autoencoders and Gaussian Mixture Models (GMMs) to create a compact, efficient compressed dataset that is able to be effectively decompressed for classification. We evaluate the effectiveness of this Latent Gaussian Compression (LGC) approach on the MNIST dataset. Our evaluation trains a classifier on the decompressed LGC MNIST training dataset, and the quantifies its accuracy on the test MNIST dataset. To establish a strong baseline, we compared this approach to a data summarization technique using coreset selection with k-medoids to find representative subset for training. For the LGC autoencoder, we experimented with various autoencoder architectures (vanilla autoencoder, VAE, contrastive VAE, and AE) to optimize performance. We further validated our method on the SpuCo (spurious correlation) dataset to assess its robustness to spurious correlations.
@@ -43,15 +32,10 @@ Our contribution is that we implement several variants of LGC with different aut
 
 Autoencoders have been used for dimensionality reduction and feature learning in various applications [1]. Variational Autoencoders (VAE) introduce a probabilistic framework for learning latent representations [2]. GMMs are employed for density estimation and data modeling [3]. Submodular maximization techniques have been explored for efficient data selection [4].
 
-### 2.1 CRUST 
-To compare the performance of LGC, a CRUST-like data summarization technique was used to find an optimal subset for training. CRUST is a robust coreset selection algorithm for neural networks. Selecting a set of medoids from the gradient space eliminates noisy labels, as clean data with similar gradients will cluster together, resulting in a noise robust summarization of the dataset. This algorithm aims to find a coreset that minimizes the following objective: 
+### 2.1 Coresets for Data Summarization
+Data summarization is used as a means of representing a large dataset with a subset of relevant examples. Although this technique is commonly used, it fails to address issues with privacy concerns, and can still be computationally expensive.
 
-$$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$ 
-
-
-where $d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||_2$ is the Euclidean distance between the gradients of data points $x_i$ and $x_j$ with respects to the model parameters $W$.
-
-One issue with a gradient-based coreset selection approach for training is that this can be computationally expensive when scaled. This technique often requires the extraction of the gradients of thousands of parameters per data point. For example, an autoencoder can have on the order of $10^5$ trainable parameters, each of which has a corresponding gradient, and it is computationally infeasible to extract and cluster a $10^5$-dimensional space for the $50,000$ training points in our MNIST dataset. 
+For a baseline comparison, we use CRUST as a baseline for our experimentation. This technique aims to minimize the dissimilarity between a selected subset and the full gradient of the dataset for robust coreset selection in deep learning applications. This technique often requires the extraction of the gradients of thousands of parameters per data point. For example, an autoencoder can have on the order of $10^5$ trainable parameters, each of which has a corresponding gradient, and it is computationally infeasible to extract and cluster a $10^5$-dimensional space for the $60,000$ training points in our MNIST dataset. 
 
 In contrast, a LGC algorithm offers a less computationally expensive solution to dataset summarization, mapping individual data points into a simple 64-dimensional latent space on which a small number of GMMs can be fitted. By modeling the distribution using GMMs, LGC can scale up or down the compression factor as the complexity of the dataset dictates simply by changing the number of Gaussian components per GMMs, and can learn a wide variety of non-Gaussian distributions.
 
@@ -130,8 +114,8 @@ During the decompression phase, the receiver receives a compressed representatio
 
 Samples are then drawn based on the reconstructed GMM's probability distrbution. Recall that a GMM consists of $k$ Gaussian distributions, each with weight $\pi_i$. To draw a sample, the reconstruction algorithm first randomly selects a Gaussian component with probability proportional to its weight $\pi_i$. After selecting the Gaussian component, it then randomly draws a sample from the Gaussian distribution based on its $\mu_i$ and $\Sigma_i$ parameters. This sample is a 64-dimensional vector in the latent space. Finally, each sampled latent vector is passed through the decoder to reconstruct the original images. The process is repeated as long as needed to reconstruct a dataset with similar aggregate statistical properties to the original dataset, though the individual points may be different.
 
-
-### 3.5 Metrics for Baseline Comparison
+## 4. Experiments and Results
+### Baseline Comparison
 <!-- WIP -->
 <!-- TODO: Include background on CNN classifier -->
 
@@ -145,52 +129,54 @@ Each autoencoder explored resulted in a compressed representation varying betwee
 
 
 ### CRUST-like Dataset Summarization Approach
+====================================
+
+To compare the performance of LGC, a CRUST-like data summarization technique was used to find an optimal subset for training. CRUST is a robust coreset selection algorithm for neural networks. Selecting a set of medoids from the gradient space eliminates noisy labels, as clean data with similar gradients will cluster together, resulting in a noise robust summarization of the dataset. This algorithm aims to find a coreset that minimizes the following objective: 
+
+$$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$ 
+
+where $d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||_2$ is the Euclidean distance between the gradients of data points $x_i$ and $x_j$ with respects to the model parameters $W$.
+
+====================================
+
 A data summarization technique was implemented utilizing the basis of the CRUST algorithm. A subset is selected to minimize the following submodular function, which can be upper bounded as shown in [!!cite CRUST paper]:
 
 $$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$
 
-To optimize this subset, a CRUST-like approach was implemented by training a neural network on the train set, extracting the gradient of the loss from the last layer of the network, and selecting a set of medoids from this gradient loss to minimize the average gradient dissimilarity, $d_{ij}$. The gradient dissimilarity is calculated as an L2 norm, representing the
+To optimize this subset, a CRUST-like approach was implemented by training a CNN on the train set, extracting the gradient of the loss from the last layer of the network, and selecting a set of medoids from this gradient loss to minimize the average gradient dissimilarity, $d_{ij}$. The gradient dissimilarity is calculated as an L2 norm, representing the
 
-$d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||_2$
+$$d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||_2$$
 
+After training the neural network, a greedy k-medoids algorithm was implemented to select an optimal coreset for training. Without a greedy implementation, k-medoids is an NP-hard problem. The Alternate algorithm for solving k-medoids was applied with a k-medoid++ approach to increase convergence time. A Partitioning Around Medoid (PAM) algorithm could be implemented for higher accuracy, but is much slower.
 
-After training the neural network, a greedy k-medoids algorithm was implemented to select an optimal coreset for training. Without a greedy implementation, k-medoids is an NP-hard problem. A Partitioning Around Medoid (PAM) algorithm is implemented to find the optimal coreset, with a k-medoid++ approach to improve the speed of convergence. 
-
-
-<!-- The success of this method in creating useful clusters varied with the autoencoder selected. Figure (!TODO) demostrates the resulting projection of a gradient space using the VAE. -->
-
+The resulting subset is represented in Figure (!TODO), projected onto a t-SNE plot. Even training on just 1 epoch, this classifier method is very strong at separating the classes of images, with just a few noisy examples near the middle. 
 <!-- (!! CITE THESE
 https://cs.stanford.edu/people/jure/pubs/crust-neurips20.pdf
 https://arxiv.org/abs/1803.00942
 ) -->
-
-![w:500 center](../pics/submodular_maximization/GradientClusters_VAE.png)
-
-
-
-<!-- ![w:500 center](../pics/submodular_maximization/GradientCluster_CM.png) -->
+<!-- ![w:500 center](../pics/submodular_maximization/GradientClusters_VAE.png) -->
+![w:500 center](../pics/submodular_maximization/GradientClusters_CNN.png)
 
 
-## 4. Experiments and Results
 
-<!-- TODO add more conent and pictures to experiments section -->
 
-This LGC approach returns a packaged representation of the dataset fitted GMM (mean vectors, covariance matrices, and component weights) and the decoder part of the autoencoder to be used for image reconstruction and training. Table 1 summarizes the performance of a CNN classifier trained on examples from each model, with the goal of achieving a high test accuracy with a small file size. Percent reduction is defined the ratio between the disk size of the full MNIST training set versus the size of the compressed file. Using a GZip compression, the MNIST dataset can be reduced by 82.34% of its original size. With the autoencoder architecture, the size of the dataset can be reduced by nearly 95.98% in size while achieving a 97.85% accuracy on the original MNIST dataset.
+
+This LGC approach returns a packaged representation of the dataset fitted GMM (mean vectors, covariance matrices, and component weights) and the decoder part of the autoencoder to be used for image reconstruction and training. Table 1 summarizes the performance of a CNN classifier trained on examples from each model, with the goal of achieving a high test accuracy with a small file size. Percent reduction is defined the ratio between the disk size of the full MNIST training set versus the size of the compressed file. Using a GZip compression, the MNIST dataset can be reduced by 82.34\% of its original size. With the autoencoder architecture, the size of the dataset can be reduced by nearly 94.44% in size while achieving a 95.98\% accuracy on the original MNIST dataset.
 
 | Approach                            |   Percent reduction |   Test accuracy | Compression Ratio|
 |:------------------------------------|--------------------:|----------------:|-----------------:|
-| GZip compression only               |               82.34 |           98.36 |       0.05569    |
-| Random subset                       |               94.32 |           82.64 |       0.14549    |
-| Gradient subset                     |               94.32 |           85.68 |       0.15084    |
-| Vanilla autoencoder                 |               94.44 |           95.98 |       0.17263    |
-| Contrastive autoencoder             |               95.51 |           89.14 |       0.19853    |
-| Variational autoencoder             |               97.77 |           82.63 |       0.37053    |
-| Conditional variational autoencoder |               97.36 |           91.34 |       0.34598    |
-| Contrastive variational autoencoder |               97.77 |           91.84 |       0.41183    |
+| GZip compression only               |               82.34 |           98.36 |        5.57      |
+| Random subset                       |               94.32 |           82.64 |       14.55      |
+| Gradient subset                     |               94.32 |           86.65 |       15.26      |
+| Vanilla autoencoder                 |               94.44 |           95.98 |       17.26      |
+| Contrastive autoencoder             |               95.51 |           89.14 |       19.85      |
+| Variational autoencoder             |               97.77 |           82.63 |       37.05      |
+| Conditional variational autoencoder |               97.36 |           91.34 |       34.60      |
+| Contrastive variational autoencoder |               97.77 |           91.84 |       41.18      |
 
 Compression ratios are reported as the following:
 
-$ Compression \ ratio = \frac{Test \ Accuracy} {1 - Percent \ reduction} $
+$$ Compression \ ratio = \frac{Test \ Accuracy} {1 - Percent \ reduction} $$
 
 As a broad comparison between all of the techniques, training on the full MNIST data, we're able to achieve the highest test accuracy, but the amount of compression falls behind, due to the linear relationship between compression size and number of examples. As a result, this results in the lowest compression ratio.
 
