@@ -1,6 +1,28 @@
 # Latent Gaussian Compression: Dataset Compression and Reconstruction with Autoencoders and Gaussian Mixture Models
 
-James Zhao, Blaine Arihara, Emily Tang, and Terry Webster
+James Zhao, Blaine Arihara, Emily Tang, and Terry Weber
+
+## TODO
+- Link code to Git repo
+  - Upload all the models/tools
+  - Upload subset selection notebook
+
+- Shorten Autoencoder part 
+  - Summarize the autoencoder architectures in a few short sentences, put the rest into appendix
+  - Summarize BIC examples, put the rest in appendix
+  - Make smaller plots, label axes
+
+- Finish the conclusion
+  - Convex hull boundary
+  - Compression Ratio
+  - Summarize accuracy
+
+- Subset selection methods
+  - Finish attempt on CNN
+
+- Future Work
+  - Optimizing the VAE
+
 
 ## Abstract
 This report explores a machine learning-based approach for compressing and reconstructing large-scale image datasets. We combine autoencoders and Gaussian Mixture Models (GMMs) to create a compact, efficient compressed dataset that is able to be effectively decompressed for classification. We evaluate the effectiveness of this Latent Gaussian Compression (LGC) approach on the MNIST dataset. Our evaluation trains a classifier on the decompressed LGC MNIST training dataset, and the quantifies its accuracy on the test MNIST dataset. To establish a strong baseline, we compared this approach to a data summarization technique using coreset selection with k-medoids to find representative subset for training. For the LGC autoencoder, we experimented with various autoencoder architectures (vanilla autoencoder, VAE, contrastive VAE, and AE) to optimize performance. We further validated our method on the SpuCo (spurious correlation) dataset to assess its robustness to spurious correlations.
@@ -178,7 +200,6 @@ Each autoencoder explored resulted in a compressed representation varying betwee
 ### Comparison to Submodular Maximization for Dataset Summarization
 A data summarization technique was implemented utilizing the basis of the CRUST algorithm. A subset is selected to minimize the following submodular function, which can be upper bounded as shown in [!!cite CRUST paper]:
 
- 
 $$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$
 
 To optimize this subset, a CRUST-like approach was implemented by training a neural network on the train set, extracting the gradient of the loss from the last layer of the network, and selecting a set of medoids from this gradient loss to minimize the average gradient dissimilarity, $d_{ij}$. This approach should guarantee a subset 
@@ -259,7 +280,6 @@ TODO add more details
 
 Future work includes exploring:
 
-* Integration of contrastive learning to enhance latent space structure.
 * Incorporation of GMM structured priors for complex latent distributions.
 * Derivation of theoretical guarantees for information retention as a function of the compression ratio.
 
