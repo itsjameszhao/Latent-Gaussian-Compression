@@ -122,7 +122,7 @@ A lower BIC score indicates a better model fit. By comparing BIC scores for diff
 
 For each class in our dataset, we trained GMMs with a varying number of components (K) and calculated their corresponding BIC scores. The optimal number of components for each class was selected as the value of K that minimized the BIC score. This optimal number of K components for each class was then input into a GMM to fit K Gaussian distributions for each class's latent distribution. This analysis was performed for each autoencoder architecture. The figure below shows examples of the BIC plots for each class for the vanilla autoencoder (left) and the variational autoencoder (right). The BIC plots for the vanilla autoencoder can be seen to indicate that between 3 and 8 Gaussian distributions are needed to best fit the latent distributions for its classes, while the variational autoencoder clearly indicates that only one Gaussian distribution is needed to best fit its class's latent distributions. BIC plots with more detailed discussion is provided in Appendix A2.
 
-![w:500 center](..\pics\general\bic_plots_AE_VAE.png)
+![w:500 center](../pics/general/bic_plots_AE_VAE.png)
 
 Performing this optimal selection of components for each class ensured that our GMMs effectively captured the underlying data distribution without overfitting or underfitting. This optimal model selection is crucial for accurate data compression and reconstruction.
 
