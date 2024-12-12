@@ -7,23 +7,12 @@ James Zhao, Blaine Arihara, Emily Tang, and Terry Weber
   - Upload all the models/tools
   - Upload subset selection notebook
 
-- Shorten Autoencoder part 
-  - Summarize the autoencoder architectures in a few short sentences, put the rest into appendix
-  - Summarize BIC examples, put the rest in appendix
-  - Make smaller plots, label axes
-
 - Finish the conclusion
-  - Convex hull boundary
-  - Compression Ratio
   - Summarize accuracy
+  - maybe add confusion matrices to appendix
 
 - Subset selection methods
   - Finish attempt on CNN
-
-- Future Work
-  - Optimizing the VAE
-  - Latent space dimensions (why 64?)
-
 
 
 ## Abstract
@@ -148,37 +137,27 @@ Samples are then drawn based on the reconstructed GMM's probability distrbution.
 
 A Convolutional Neural Network (CNN) classifier is used to evaluate the performance of each model. As a baseline comparison, three methods of training this classifier are taken: (1) Training on the full MNIST training set, (2) training on a random subset of equivalent size to the LGC models, and (3) training on a subset selected utilizing a CRUST-like data summarization approach.
 
-Each autoencoder explored resulted in a compressed representation varying between 1-3 MB in size. A subset of 182 examples were extracted from the training data, the equivalent to 3MB of data when GZipped.
+Each autoencoder explored resulted in a compressed representation varying between 1-3 MB in size. In contrast, the amount of disk space taken up by the uncompressed MNIST results in 11.55 GB. Using a GZip compression, the size of the dataset can be reduced by 82.34%. This is still not a scalable solution for addressing even larger datassets. Even with the compression, a linear relationship between compression size and number of examples is inevitable. For a more fair comparison, a subset of 182 examples were extracted from the training data, the equivalent to the size of the LGC retaining 3 MB of data when GZipped. This subset selection method is implemented using a random subset selection, as well as a CRUST-like approach to data summarization.
+
+
 <!-- TODO idk if this figure is necessary, TBD -->
 ![w:500 center](../pics/submodular_maximization/example_size.png)
 
 
-### Comparison to Submodular Maximization for Dataset Summarization
+### CRUST-like Dataset Summarization Approach
 A data summarization technique was implemented utilizing the basis of the CRUST algorithm. A subset is selected to minimize the following submodular function, which can be upper bounded as shown in [!!cite CRUST paper]:
 
 $$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$
 
 To optimize this subset, a CRUST-like approach was implemented by training a neural network on the train set, extracting the gradient of the loss from the last layer of the network, and selecting a set of medoids from this gradient loss to minimize the average gradient dissimilarity, $d_{ij}$. The gradient dissimilarity is calculated as an L2 norm, representing the
 
-$$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$
+$d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||_2$
+
 
 After training the neural network, a greedy k-medoids algorithm was implemented to select an optimal coreset for training. Without a greedy implementation, k-medoids is an NP-hard problem. A Partitioning Around Medoid (PAM) algorithm is implemented to find the optimal coreset, with a k-medoid++ approach to improve the speed of convergence. 
-<!-- maybe needs a reference -->
-
-<!-- A sillohuette method can be used to validate the gradient clustering.  -->
 
 
-<!-- 
-In this implementation, the autoencoders were used as the neural networks for uncovering representative gradients. -->
-
-
-
-
-
- <!-- The last layer gradients retrieved were 28x28 representations, matching each pixel of an image. These gradients were reduced to a 64-dimensional latent space with Singular Value Decomposition (SVD) before clustering, and projected onto two dimensions using t-SNE for visualization.
-
-
-The success of this method in creating useful clusters varied with the autoencoder selected. Figure (!TODO) demostrates the resulting projection of a gradient space using the VAE.  -->
+<!-- The success of this method in creating useful clusters varied with the autoencoder selected. Figure (!TODO) demostrates the resulting projection of a gradient space using the VAE. -->
 
 <!-- (!! CITE THESE
 https://cs.stanford.edu/people/jure/pubs/crust-neurips20.pdf
@@ -190,6 +169,7 @@ https://arxiv.org/abs/1803.00942
 
 
 <!-- ![w:500 center](../pics/submodular_maximization/GradientCluster_CM.png) -->
+
 
 ## 4. Experiments and Results
 
