@@ -22,6 +22,8 @@ James Zhao, Blaine Arihara, Emily Tang, and Terry Weber
 
 - Future Work
   - Optimizing the VAE
+  - Latent space dimensions (why 64?)
+
 
 
 ## Abstract
@@ -156,7 +158,9 @@ A data summarization technique was implemented utilizing the basis of the CRUST 
 
 $$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$
 
-To optimize this subset, a CRUST-like approach was implemented by training a neural network on the train set, extracting the gradient of the loss from the last layer of the network, and selecting a set of medoids from this gradient loss to minimize the average gradient dissimilarity, $d_{ij}$. This approach should guarantee a subset 
+To optimize this subset, a CRUST-like approach was implemented by training a neural network on the train set, extracting the gradient of the loss from the last layer of the network, and selecting a set of medoids from this gradient loss to minimize the average gradient dissimilarity, $d_{ij}$. The gradient dissimilarity is calculated as an L2 norm, representing the
+
+$$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$
 
 After training the neural network, a greedy k-medoids algorithm was implemented to select an optimal coreset for training. Without a greedy implementation, k-medoids is an NP-hard problem. A Partitioning Around Medoid (PAM) algorithm is implemented to find the optimal coreset, with a k-medoid++ approach to improve the speed of convergence. 
 <!-- maybe needs a reference -->
@@ -191,24 +195,28 @@ https://arxiv.org/abs/1803.00942
 
 <!-- TODO add more conent and pictures to experiments section -->
 
-### 4.1 Compression Ratio
-This LGC approach returns a packaged representation of the dataset fitted GMM (mean vectors, covariance matrices, and component weights) and the decoder part of the autoencoder to be used for image reconstruction and training. Using a GZip compression, the MNIST dataset can be reduced to 82.34% of its original size. With the autoencoder architecture, the size of the dataset can be reduced by nearly 95.98% in size while achieving a 97.85% accuracy on the original MNIST dataset.
+This LGC approach returns a packaged representation of the dataset fitted GMM (mean vectors, covariance matrices, and component weights) and the decoder part of the autoencoder to be used for image reconstruction and training. Table 1 summarizes the performance of a CNN classifier trained on examples from each model, with the goal of achieving a high test accuracy with a small file size. Percent reduction is defined the ratio between the disk size of the full MNIST training set versus the size of the compressed file. Using a GZip compression, the MNIST dataset can be reduced by 82.34% of its original size. With the autoencoder architecture, the size of the dataset can be reduced by nearly 95.98% in size while achieving a 97.85% accuracy on the original MNIST dataset.
 
 | Approach                            |   Percent reduction |   Test accuracy | Compression Ratio|
 |:------------------------------------|--------------------:|----------------:|-----------------:|
 | GZip compression only               |               82.34 |           98.36 |       0.05569    |
 | Random subset                       |               94.32 |           82.64 |       0.14549    |
 | Gradient subset                     |               94.32 |           85.68 |       0.15084    |
-| Vanilla autoencoder                 |               94.44 |           95.98 |       0.172625   |
+| Vanilla autoencoder                 |               94.44 |           95.98 |       0.17263    |
 | Contrastive autoencoder             |               95.51 |           89.14 |       0.19853    |
 | Variational autoencoder             |               97.77 |           82.63 |       0.37053    |
 | Conditional variational autoencoder |               97.36 |           91.34 |       0.34598    |
 | Contrastive variational autoencoder |               97.77 |           91.84 |       0.41183    |
 
-Compression ratios are reported as Test Accuracy/Compression Size
+Compression ratios are reported as the following:
 
-### 4.1 Baseline Comparison
-The highest accuracy was observed from the CNN classifer trained on the full MNIST dataset. However, this model gives us the least amount of compression, with a compression ratio of 1.19. 
+$ Compression \ ratio = \frac{Test \ Accuracy} {1 - Percent \ reduction} $
+
+As a broad comparison between all of the techniques, training on the full MNIST data, we're able to achieve the highest test accuracy, but the amount of compression falls behind, due to the linear relationship between compression size and number of examples. As a result, this results in the lowest compression ratio.
+
+Out of the autoencoder architectures, 
+
+This compression ratio provides a broad comparison of the trade-off between size and accuracy. In application, the amount of compression vs the desired test accuracy is dependent on the use case. Figure (!TODO add figure) highlights this trade-off. The convex hull boundary demonstrates the theoretical optimum boundary. With a higher amount of compression, the trade-off grows rapidly between compression and accuracy. Further optimization may improve this trade-off at higher reductions.
 
 
 ![w:700 center](../pics/general/compression_vs_accuracy.png)
