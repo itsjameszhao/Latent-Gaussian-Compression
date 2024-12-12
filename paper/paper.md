@@ -285,7 +285,7 @@ Future work includes exploring:
 
 One thing we looked into was how our approach would handle spurious correlations by training the autoencoder component of our pipeline on the SpucoMNIST dataset, setting each digit to be highly correlated to different background colors, as opposed to the black and white MNIST images. What we found was that the fully connected autoencoder in our pipeline did not handle spurious correlations very well, and would associate the background colors more than the features of the digits during reconstruction.
 
-We found using a convolutional architecture helped with this and we got better results (See Figure A1 for a diagram of the architecture used).
+We found using a convolutional VAE architecture helped with mitigating spurious correlations, and reconstructed the images more accurately (See Figure A1 for a diagram of the convolutional VAE architecture).
 
 
 <table>
@@ -302,7 +302,7 @@ We found using a convolutional architecture helped with this and we got better r
 
 The usage of convolutional architecture for image recognition is not a new idea and dates back to the Lenet architecture from the 1998 paper, which was used to read zip codes and other digits<sup>4</sup>. It was reported that convolutional networks “ensure some degree of shift, scale, and distortion invariance”, which would have a similar effect to performing augmentations on the data in preprocessing and training on a sequential network<sup>5</sup>. From this paper it is known that convolutional networks are not sensitive to “shifts and distortions of the input” and that “once a feature has been detected, its exact location becomes less important”<sup>5</sup>. These capabilities contribute to the robustness of convolutional networks for image recognition, and help mitigate spurious correlations in training. For future work, integrating a convolutional VAE could enable this architecture to be generalized and used for different sets of even more complex images, even those containing a high degree of spurious correlations. 
 
-Additionally we could have further tuned the hyperparameters of our vanilla VAEs used in the compression pipeline to achieve better accuracy, such as the number of dimensions in the latent space or the nodes within the layers, in order to achieve better perfomance. Our results showed that the non variational autoencoder had a higher test accuracy after compression than the VAE models we tested, but this seems to go against inution, leading to the conclusion that there was perhaps more we could have done to fine tune those models. A more complex model would take up more bandwidth as well, but it could be worth the trade off. 
+Additionally we could have further tuned the hyperparameters of our vanilla VAEs used in the compression pipeline to achieve better accuracy, such as the number of dimensions in the latent space or the nodes within the layers, in order to achieve better perfomance. Our results showed that the non variational autoencoder had a higher test accuracy after compression than the VAE models we tested, but this seems to go against intuition, leading to the conclusion that there was perhaps more we could have done to fine tune those models. A more complex model would take up more bandwidth as well, but it could be worth the trade off. 
 
 ## 7. References
 
