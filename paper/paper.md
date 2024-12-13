@@ -5,7 +5,7 @@ James Zhao, Blaine Arihara, Emily Tang, and Terry Weber
 --- Overleaf link: https://www.overleaf.com/9441718858cjvkmxjfshfm#3a0a87
 
 ## Abstract
-This report explores a machine learning-based approach for compressing and reconstructing large-scale image datasets. We combine autoencoders and Gaussian Mixture Models (GMMs) to create a compact, efficient compressed dataset that is able to be effectively decompressed for classification. We evaluate the effectiveness of this Latent Gaussian Compression (LGC) approach on the MNIST dataset. Our evaluation trains a classifier on the decompressed LGC MNIST training dataset, and the quantifies its accuracy on the test MNIST dataset. To establish a strong baseline, we compared this approach to a data summarization technique using coreset selection with k-medoids to find representative subset for training. For the LGC autoencoder, we experimented with various autoencoder architectures (vanilla autoencoder, VAE, contrastive VAE, and AE) to optimize performance. We further validated our method on the SpuCo (spurious correlation) dataset to assess its robustness to spurious correlations.
+This report explores a machine learning-based approach for compressing and reconstructing large-scale image datasets. We combine autoencoders and Gaussian Mixture Models (GMMs) to create a compact, efficient compressed dataset that is able to be effectively decompressed for training models after transport. We evaluate the effectiveness of this Latent Gaussian Compression (LGC) approach on the MNIST dataset. Our evaluation trains a classifier on a decompressed LGC representation of the MNIST training dataset, and the quantifies its accuracy on the original test MNIST dataset. To establish a strong baseline, we compare this approach to a data summarization technique using coreset selection with k-medoids to find representative subset for training. For the LGC autoencoder, we experimented with various autoencoder architectures (vanilla autoencoder, VAE, contrastive VAE, and AE) to optimize performance. We further validated our method on the SpuCo (spurious correlation) MNIST dataset to assess its robustness to spurious correlations.
 
 ## 1. Introduction
 
@@ -232,7 +232,13 @@ The usage of convolutional architecture for image recognition is not a new idea 
 
 Additionally we could have further tuned the hyperparameters of our vanilla VAEs used in the compression pipeline to achieve better accuracy, such as the number of dimensions in the latent space or the nodes within the layers. Our results showed that the non variational autoencoder had a higher test accuracy after compression than the VAE models we tested, but this seems to go against intuition, leading to the conclusion that there was perhaps more we could have done to fine tune those models. A more complex model would take up more bandwidth as well, but it could be worth the trade off. 
 
-## 7. References
+## Acknowledgements and Contributions
+This project was completed through joint efforts between James Zhao, Blaine Arihara, Emily Tang, and Terry Weber. James spearheaded the concept for this project, diving into methods of representing data in latent spaces, and working with Blaine to implement the autoencoding architecture for this application. Emily worked on evaluating the performance of these architectures by drawing a baseline comparison, while Terry explored improvements for the different architectures and further applications. 
+
+Thank you to Professor Baharan Mirzasoleiman and the rest of the teaching staff of CS260D, Yihao Xue, Siddharth Joshi, and Chris Vatt, for their support and guidance throughout the quarter.
+
+
+## References
 
 TODO add a more comprehensive list of references to both here and the paper
 
