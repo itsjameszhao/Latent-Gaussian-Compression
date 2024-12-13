@@ -225,11 +225,10 @@ Thank you to Professor Baharan Mirzasoleiman and the rest of the teaching staff 
 
 TODO add a more comprehensive list of references to both here and the paper
 
-  * [1] Hinton, G. E., & Salakhutdinov, R. R. (2006). Reducing the dimensionality of data with neural networks. Science, 313(5786), 504-507.
+  * [1] Hinton, Geoffrey E., and Ruslan R. Salakhutdinov. "Reducing the dimensionality of data with neural networks." science 313.5786 (2006): 504-507.
   * [2] Kingma, D. P., & Welling, M. (2013). Auto-encoding variational 1  inference. arXiv preprint arXiv:1312.6114.
-  * [3] Bishop, C. M. (2006). Pattern recognition and machine learning. Springer.
-  * [4] “Convolutional Neural Networks (CNNs / ConvNets).” CS231n Convolutional Neural Networks for Visual Recognition Course Website, Stanford https://cs231n.github.io/convolutional-networks/, 12-1-2024.
-  * [5] Y. Lecun, L. Bottou, Y. Bengio and P. Haffner, "Gradient-based learning applied to document recognition," in Proceedings of the IEEE, vol. 86, no. 11, pp. 2278-2324, Nov. 1998, doi: 10.1109/5.726791.
+  * [3] Bishop, Christopher M., and Nasser M. Nasrabadi. Pattern recognition and machine learning. Vol. 4. No. 4. New York: springer, 2006
+  * [4] Mirzasoleiman, Baharan, Kaidi Cao, and Jure Leskovec. "Coresets for robust training of deep neural networks against noisy labels." Advances in Neural Information Processing Systems 33 (2020): 11465-11477.
 
 
 ## 8. Appendix
