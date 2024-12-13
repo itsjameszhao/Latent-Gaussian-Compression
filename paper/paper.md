@@ -227,7 +227,7 @@ TODO add a more comprehensive list of references to both here and the paper
 
   * [1] Hinton, Geoffrey E., and Ruslan R. Salakhutdinov. "Reducing the dimensionality of data with neural networks." science 313.5786 (2006): 504-507.
   * [2] Kingma, D. P., & Welling, M. (2013). Auto-encoding variational inference. arXiv preprint arXiv:1312.6114.
-  * [3] Bishop, Christopher M., and Nasser M. Nasrabadi. Pattern recognition and machine learning. Vol. 4. No. 4. New York: springer, 2006
+  * [3] Bishop, Christopher M., and Nasser M. Nasrabadi. Pattern recognition and machine learning. Vol. 4. No. 4. New York: springer, 2006.
   * [4] Mirzasoleiman, Baharan, Kaidi Cao, and Jure Leskovec. "Coresets for robust training of deep neural networks against noisy labels." Advances in Neural Information Processing Systems 33 (2020): 11465-11477.
 
 
