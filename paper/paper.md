@@ -187,12 +187,11 @@ In conclusion, our LGC approach offers a promising solution for compressing larg
 
 ## 6. Future Work
 
-TODO add more details
-
 Future work includes exploring:
 
 * Incorporation of GMM structured priors for complex latent distributions.
 * Derivation of theoretical guarantees for information retention as a function of the compression ratio.
+* Further Optimizations of autoencoder architecture
 
 One thing we looked into was how our approach would handle spurious correlations by training the autoencoder component of our pipeline on the SpucoMNIST dataset, setting each digit to be highly correlated to different background colors, as opposed to the black and white MNIST images. What we found was that the fully connected autoencoder in our pipeline did not handle spurious correlations very well, and would associate the background colors more than the features of the digits during reconstruction.
 
