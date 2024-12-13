@@ -210,7 +210,7 @@ We found using a convolutional VAE architecture helped with mitigating spurious 
   
 </table>
 
-The usage of convolutional architecture for image recognition is not a new idea and dates back to the Lenet architecture from the 1998 paper, which was used to read zip codes and other digits<sup>4</sup>. It was reported that convolutional networks “ensure some degree of shift, scale, and distortion invariance”, which would have a similar effect to performing augmentations on the data in preprocessing and training on a sequential network<sup>5</sup>. From this paper it is known that convolutional networks are not sensitive to “shifts and distortions of the input” and that “once a feature has been detected, its exact location becomes less important”<sup>5</sup>. These capabilities contribute to the robustness of convolutional networks for image recognition, and help mitigate spurious correlations in training. For future work, integrating a convolutional VAE could enable this architecture to be generalized and used for different sets of even more complex images, even those containing a high degree of spurious correlations. 
+The usage of convolutional architecture for image recognition is not a new idea and dates back to the Lenet architecture from the 1998 paper, which was used to read zip codes and other digits. It was reported that convolutional networks “ensure some degree of shift, scale, and distortion invariance”, which would have a similar effect to performing augmentations on the data in preprocessing and training on a sequential network (LeCun et al., 1998). From this paper it is known that convolutional networks are not sensitive to “shifts and distortions of the input” and that “once a feature has been detected, its exact location becomes less important”(LeCun et al., 1998). These capabilities contribute to the robustness of convolutional networks for image recognition, and help mitigate spurious correlations in training. For future work, integrating a convolutional VAE could enable this architecture to be generalized and used for different sets of even more complex images, even those containing a high degree of spurious correlations. 
 
 Additionally we could have further tuned the hyperparameters of our vanilla VAEs used in the compression pipeline to achieve better accuracy, such as the number of dimensions in the latent space or the nodes within the layers. Our results showed that the non variational autoencoder had a higher test accuracy after compression than the VAE models we tested, but this seems to go against intuition, leading to the conclusion that there was perhaps more we could have done to fine tune those models. A more complex model would take up more bandwidth as well, but it could be worth the trade off. 
 
@@ -228,6 +228,8 @@ TODO add a more comprehensive list of references to both here and the paper
   * [2] Kingma, D. P., & Welling, M. (2013). Auto-encoding variational inference. arXiv preprint arXiv:1312.6114.
   * [3] Bishop, Christopher M., and Nasser M. Nasrabadi. Pattern recognition and machine learning. Vol. 4. No. 4. New York: springer, 2006.
   * [4] Mirzasoleiman, Baharan, Kaidi Cao, and Jure Leskovec. "Coresets for robust training of deep neural networks against noisy labels." Advances in Neural Information Processing Systems 33 (2020): 11465-11477.
+  * [5] http://vision.stanford.edu/cs598_spring07/papers/Lecun98.pdf
+  * [6] 
 
 
 ## 8. Appendix
