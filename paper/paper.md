@@ -11,13 +11,10 @@ This report explores a machine learning-based approach for compressing and recon
 
 The rapid growth of machine learning has led to the proliferation of massive datasets. While these datasets have enabled significant advancements in various fields, they also present significant challenges related to storage, transmission, and computational costs. As datasets continue to grow in size and complexity, the need for efficient compression techniques becomes increasingly critical.
 
-One significant challenge is the transmission of large datasets across networks. Limited bandwidth and high latency can hinder collaborative research and the deployment of machine learning models. Moreover, privacy concerns often restrict the sharing of sensitive data. To address these issues, researchers have explored various techniques for compressing datasets while preserving their essential information.
+One significant challenge is the transmission of large datasets across networks. Limited bandwidth and high latency can hinder collaborative research and the deployment of machine learning models. Futhermore, privacy concerns often restrict the sharing of sensitive data. To address these issues, researchers have explored various techniques for compressing datasets while preserving their essential information.
 
+### Problem statement
 In this paper, we propose an approach to dataset compression called Latent Gaussian Compression (LGC). LGC leverages the power of autoencoders and Gaussian Mixture Models (GMMs) to create a compact, efficient representation of the dataset. By capturing the underlying data distribution and reconstructing the original data from a compressed latent space, LGC enables efficient data transmission and storage while preserving essential features for machine learning tasks.
-
-Our approach offers several advantages over traditional compression techniques, including preservation of information, preservation of privacy, efficient transmission, and reduced storage costs. Our LGC algorithm focuses on preserving the information relevant for training the classifier, and anonymizes the training dataset by making sure that specific points in the dataset cannot be fully reconstructed, only general distributions. It is able to achieve a >3x compression factor improvement over GZip, and has benefits ranging from more efficient bandwidth utilization to reduced storage costs.
-
-We evaluate the effectiveness of LGC on both regular MNIST and SpuCo MNIST and compare its performance to coreset selection. Our results demonstrate that LGC can achieve significant compression ratios while maintaining high levels of accuracy in downstream machine learning tasks.
 
 ![w:700 center](../diagrams/network_diagram.png)
 
@@ -25,24 +22,26 @@ Consider a scenario where two researchers, Researcher 1 and Researcher 2, collab
 
 Using LGC, Researcher 1 can compress their dataset $D$ into a compressed representation $D'$. This compressed representation can be transmitted over the network to Researcher 2 with minimal bandwidth overhead. Researcher 2 can then decompress $D'$ and use it to train their model $M'$, with the additional benefit that only a similar distribution to the original, but not the exact original data points, can be reconstructed.
 
+### Proposed solution
+Our approach offers several advantages over traditional compression techniques, including preservation of information, preservation of privacy, efficient transmission, and reduced storage costs. Our LGC algorithm focuses on preserving the information relevant for training the classifier, and anonymizes the training dataset by making sure that specific points in the dataset cannot be fully reconstructed, only general distributions. It is able to achieve a >3x compression factor improvement over GZip, and has benefits ranging from more efficient bandwidth utilization to reduced storage costs.
 
-Our contribution is that we implement several variants of LGC with different autoencoder architectures (vanilla AE, VAE, conditional VAE, with and without contrastive learning) and compare these approaches against a baseline submodular maximization approach using gradient space K-Medoids for coreset selection. We discover a trade-off between compression factor and classifier accuracy and integrate our empirical findings within the broader Information Bottleneck (IB) theoretical framework.
+We evaluate the effectiveness of LGC on the MNIST and SpuCo MNIST databases and compare its performance a data summarization technique. Our results demonstrate that LGC can achieve significant compression ratios while maintaining high levels of accuracy in downstream machine learning tasks.
+
+### Motivations
+Autoencoders have been used for dimensionality reduction and feature learning in various applications [1]. Variational Autoencoders (VAE) introduce a probabilistic framework for learning latent representations [2]. GMMs are employed for density estimation and data modeling [3]. Our technique combines these concepts to address this issue.
+
+Our contribution implements several variants of LGC with different autoencoder architectures (vanilla AE, VAE, conditional VAE, with and without contrastive learning). These approaches are then compared against a baseline data summarization approach selecting an optimal coreset in gradient space to represent the dataset. We discover a trade-off between compression factor and classifier accuracy and integrate our empirical findings within the broader Information Bottleneck (IB) theoretical framework.
 
 ## 2. Related Work
 
-Autoencoders have been used for dimensionality reduction and feature learning in various applications [1]. Variational Autoencoders (VAE) introduce a probabilistic framework for learning latent representations [2]. GMMs are employed for density estimation and data modeling [3]. Submodular maximization techniques have been explored for efficient data selection [4].
+Submodular maximization techniques have been explored for efficient data selection [4]. These techniques provide a means of representing a large dataset with a subset of relevant examples. Although these technique are commonly used, it fails to address issues with privacy concerns.
 
-### 2.1 Coresets for Data Summarization
-Data summarization is used as a means of representing a large dataset with a subset of relevant examples. Although this technique is commonly used, it fails to address issues with privacy concerns, and can still be computationally expensive.
-
-For a baseline comparison, we use CRUST as a baseline for our experimentation. This technique aims to minimize the dissimilarity between a selected subset and the full gradient of the dataset for robust coreset selection in deep learning applications. This technique often requires the extraction of the gradients of thousands of parameters per data point. For example, an autoencoder can have on the order of $10^5$ trainable parameters, each of which has a corresponding gradient, and it is computationally infeasible to extract and cluster a $10^5$-dimensional space for the $60,000$ training points in our MNIST dataset. 
+For a baseline comparison, we explore the CRUST algorithm for robust subset selection. This technique aims to minimize the dissimilarity between a selected subset and the full gradient of the dataset for robust coreset selection in deep learning applications. This technique often requires the extraction of the gradients of thousands of parameters per data point. For example, an autoencoder can have on the order of $10^5$ trainable parameters, each of which has a corresponding gradient, and it is computationally infeasible to extract and cluster a $10^5$-dimensional space for the $60,000$ training points in our MNIST dataset. 
 
 In contrast, a LGC algorithm offers a less computationally expensive solution to dataset summarization, mapping individual data points into a simple 64-dimensional latent space on which a small number of GMMs can be fitted. By modeling the distribution using GMMs, LGC can scale up or down the compression factor as the complexity of the dataset dictates simply by changing the number of Gaussian components per GMMs, and can learn a wide variety of non-Gaussian distributions.
 
 ## 3. Methodology
-
 There are three stages to our LGC algorithm: a compression stage, a transport phase, and a decompression phase. The compression phase is analogous to GZip compression, the transport phase is analogous to transportation of the compressed file, and the decompression phase is analogous to decompressing the received GZip file.
-<!-- this would make a pretty flowchart -->
 
 ### 3.1 Compression Phase
 In the compression phase, an autoencoder, which can be either a vanilla autoencoder or any of the variants we experiment with below, can be used. The encoder portion of the autoencoder maps input images to latent vectors, while the decoder reconstructs the original images from the latent vectors. 
@@ -123,33 +122,23 @@ A Convolutional Neural Network (CNN) classifier is used to evaluate the performa
 
 Each autoencoder explored resulted in a compressed representation varying between 1-3 MB in size. In contrast, the amount of disk space taken up by the uncompressed MNIST results in 11.55 GB. Using a GZip compression, the size of the dataset can be reduced by 82.34%. This is still not a scalable solution for addressing even larger datassets. Even with the compression, a linear relationship between compression size and number of examples is inevitable. For a more fair comparison, a subset of 182 examples were extracted from the training data, the equivalent to the size of the LGC retaining 3 MB of data when GZipped. This subset selection method is implemented using a random subset selection, as well as a CRUST-like approach to data summarization.
 
-
 <!-- TODO idk if this figure is necessary, TBD -->
 ![w:500 center](../pics/submodular_maximization/example_size.png)
 
 
 ### CRUST-like Dataset Summarization Approach
-====================================
 
 To compare the performance of LGC, a CRUST-like data summarization technique was used to find an optimal subset for training. CRUST is a robust coreset selection algorithm for neural networks. Selecting a set of medoids from the gradient space eliminates noisy labels, as clean data with similar gradients will cluster together, resulting in a noise robust summarization of the dataset. This algorithm aims to find a coreset that minimizes the following objective: 
 
 $$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$ 
 
-where $d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||_2$ is the Euclidean distance between the gradients of data points $x_i$ and $x_j$ with respects to the model parameters $W$.
-
-====================================
-
-A data summarization technique was implemented utilizing the basis of the CRUST algorithm. A subset is selected to minimize the following submodular function, which can be upper bounded as shown in [!!cite CRUST paper]:
-
-$$ S^{*}(W) = arg min_{S \subseteq V, |S| \leq k} \sum_{i \in V} \min_{j \in S} d_{ij}(W) $$
-
-To optimize this subset, a CRUST-like approach was implemented by training a CNN on the train set, extracting the gradient of the loss from the last layer of the network, and selecting a set of medoids from this gradient loss to minimize the average gradient dissimilarity, $d_{ij}$. The gradient dissimilarity is calculated as an L2 norm, representing the
+To optimize the subset selected, a CRUST-like approach was implemented by training a CNN on the train set, extracting the gradient of the loss from the last layer of the network, and selecting a set of medoids from this gradient loss to minimize the average gradient dissimilarity, $d_{ij}$. The gradient dissimilarity is calculated as an L2 norm, represented by
 
 $$d_{ij}(W) = ||\nabla \mathcal{L}(W, x_i) - \nabla \mathcal{L}(W, x_j)||_2$$
 
-After training the neural network, a greedy k-medoids algorithm was implemented to select an optimal coreset for training. Without a greedy implementation, k-medoids is an NP-hard problem. The Alternate algorithm for solving k-medoids was applied with a k-medoid++ approach to increase convergence time. A Partitioning Around Medoid (PAM) algorithm could be implemented for higher accuracy, but is much slower.
+This dissimilarity can be bounded for submodular maximization, as demonstrated in by the CRUST algorithm []. After training the neural network, a greedy k-medoids algorithm was implemented to select an optimal coreset for training. Without a greedy implementation, k-medoids is an NP-hard problem. The Alternate algorithm for solving k-medoids was applied with a k-medoid++ approach to increase convergence time. A Partitioning Around Medoid (PAM) algorithm could be implemented for higher accuracy, but is much slower.
 
-The resulting subset is represented in Figure (!TODO), projected onto a t-SNE plot. Even training on just 1 epoch, this classifier method is very strong at separating the classes of images, with just a few noisy examples near the middle. 
+The resulting subset is represented in Figure (!TODO), projected onto a t-SNE plot. Even after training the CNN on just 1 epoch, this classifier begins to separate the classes of images immediately, with just a few noisy examples near the middle. 
 <!-- (!! CITE THESE
 https://cs.stanford.edu/people/jure/pubs/crust-neurips20.pdf
 https://arxiv.org/abs/1803.00942
@@ -157,11 +146,8 @@ https://arxiv.org/abs/1803.00942
 <!-- ![w:500 center](../pics/submodular_maximization/GradientClusters_VAE.png) -->
 ![w:500 center](../pics/submodular_maximization/GradientClusters_CNN.png)
 
-
-
-
-
-This LGC approach returns a packaged representation of the dataset fitted GMM (mean vectors, covariance matrices, and component weights) and the decoder part of the autoencoder to be used for image reconstruction and training. Table 1 summarizes the performance of a CNN classifier trained on examples from each model, with the goal of achieving a high test accuracy with a small file size. Percent reduction is defined the ratio between the disk size of the full MNIST training set versus the size of the compressed file. Using a GZip compression, the MNIST dataset can be reduced by 82.34\% of its original size. With the autoencoder architecture, the size of the dataset can be reduced by nearly 94.44% in size while achieving a 95.98\% accuracy on the original MNIST dataset.
+### Comparing the performance
+This LGC approach returns a packaged representation of the dataset fitted GMM (mean vectors, covariance matrices, and component weights) and the decoder part of the autoencoder to be used for image reconstruction and training. Table 1 summarizes the performance of a CNN classifier trained on examples from each model, along with the amount of size reduction the model was able to achieve. Percent reduction is defined the ratio between the disk size of the full MNIST training data (11.55 GB) versus the size of the compressed file. Using a GZip compression, the MNIST dataset can be reduced by 82.34\% compared to its original size. The vanilla autoencoder architecture reduced the size by 94.44% while achieving a 95.98\% accuracy on the original MNIST test set. 
 
 | Approach                            |   Percent reduction |   Test accuracy | Compression Ratio|
 |:------------------------------------|--------------------:|----------------:|-----------------:|
@@ -178,15 +164,12 @@ Compression ratios are reported as the following:
 
 $$ Compression \ ratio = \frac{Test \ Accuracy} {1 - Percent \ reduction} $$
 
-As a broad comparison between all of the techniques, training on the full MNIST data, we're able to achieve the highest test accuracy, but the amount of compression falls behind, due to the linear relationship between compression size and number of examples. As a result, this results in the lowest compression ratio.
+The goal of this evaluation is to achieve a high test accuracy with a small file size, so a larger compression ratio signifies a "better" performance. For example, training on the full MNIST data, we're able to achieve the highest test accuracy, but the amount of compression falls behind, due to the linear relationship between compression size and number of examples. As a result, this technique has the lowest compression ratio. Whereas, the Contrastive-VAE has the largest percent reduction with a fairly high accuracy, resulting in higher compression ratio.
 
-Out of the autoencoder architectures, 
-
-This compression ratio provides a broad comparison of the trade-off between size and accuracy. In application, the amount of compression vs the desired test accuracy is dependent on the use case. Figure (!TODO add figure) highlights this trade-off. The convex hull boundary demonstrates the theoretical optimum boundary. With a higher amount of compression, the trade-off grows rapidly between compression and accuracy. Further optimization may improve this trade-off at higher reductions.
+This compression ratio provides a broad comparison of the trade-off between size and accuracy. In application, the amount of compression vs the desired test accuracy is dependent on the use case. Figure (!TODO add figure) draws a convex hull boundary demonstrating the theoretical optimum boundary, highlighting this trade-off. With a higher amount of compression, the trade-off grows rapidly between compression and accuracy. Further optimization of the models could expand this boundary, improving the relationship between accuracy and compression at higher compressions.
 
 
 ![w:700 center](../pics/general/compression_vs_accuracy.png)
-
 
 
 
