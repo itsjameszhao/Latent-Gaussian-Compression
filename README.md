@@ -14,3 +14,7 @@ This project explores a machine learning-based approach to compress and reconstr
 ### Motivation
 
 Traditional compression methods may not preserve essential features for machine learning tasks. This approach leverages learned representations and generative models to balance storage efficiency with classification performance.
+
+## Source Code
+
+Implementations for this project can be found in **...\code\**
