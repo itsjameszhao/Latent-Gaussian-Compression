@@ -5,7 +5,7 @@ James Zhao, Blaine Arihara, Emily Tang, and Terry Weber
 --- Overleaf link: https://www.overleaf.com/9441718858cjvkmxjfshfm#3a0a87
 
 ## Abstract
-This report explores a machine learning-based approach for compressing and reconstructing large-scale image datasets. We combine autoencoders and Gaussian Mixture Models (GMMs) to create a compact, efficient compressed dataset that is able to be effectively decompressed for training models after transport. We evaluate the effectiveness of this Latent Gaussian Compression (LGC) approach on the MNIST dataset. Our evaluation trains a classifier on a decompressed LGC representation of the MNIST training dataset, and the quantifies its accuracy on the original test MNIST dataset. To establish a strong baseline, we compare this approach to a data summarization technique using coreset selection with k-medoids to find representative subset for training. For the LGC autoencoder, we experimented with various autoencoder architectures (vanilla autoencoder, VAE, contrastive VAE, and AE) to optimize performance. We further validated our method on the SpuCo (spurious correlation) MNIST dataset to assess its robustness to spurious correlations.
+This report explores a machine learning-based approach for compressing and reconstructing large-scale image datasets. We combine autoencoders and Gaussian Mixture Models (GMMs) to create a compact, efficient compressed dataset that is able to be effectively decompressed for training models after transport. We evaluate the effectiveness of this Latent Gaussian Compression (LGC) approach on the MNIST dataset. Our evaluation trains a classifier on a decompressed LGC representation of the MNIST training dataset, and the quantifies its accuracy on the original test MNIST dataset. To establish a strong baseline, we compare this approach to a data summarization technique using coreset selection with k-medoids to find representative subset for training. For the LGC autoencoder, we experimented with various autoencoder architectures (vanilla autoencoder, VAE, contrastive VAE, and AE) to optimize performance. We further explore the application of this approach on the SpuCo (spurious correlation) MNIST dataset to assess its robustness to spurious correlations.
 
 ## 1. Introduction
 
@@ -290,6 +290,20 @@ This section presents the Bayesian Information Criterion plots that illustrate t
 - **Conditional Variational Autoencoder (CVAE):**
   - The conditional VAE expectedly also indicates that only one Gaussian distribution is needed to characterize the latent distributions, similar to the VAE. The CVAE is only different than the VAE in that it appends the one-hot encodings of the images to the inputs of the encoder and decoder, but it would not significantly affect the characteristics of the spread in latent space that the encoder learns to transform images into. So similar to the VAE, the BIC plots suggest one component to be sufficient to characterize the latent distributions.
   ![w:500 center](../pics/conditional_VAE/cvae_bic_curve2.png)
+
+
+
+### Subset selection further explored
+The size of the MNIST dataset can be compressed, however the relationship between the number of examples and the size of the compressed representation is still linear. Because of this, scaling subset selection techniques can still be heavily budget contrained, demonstrated in Figure (!!!).
+
+
+Different neural network architectures was also explored for selecting an optimal subset. Visualizing the gradient space for the AE and VAE was interesting because it mirrored what was observed in the latent space projections, where the AE had classes begin to separate, while the VAE did not cluster by class without the addition of the contrastive element.
+
+![w:500 center](../pics/submodular_maximization/GradientClusters_AE.png)
+
+![w:500 center](../pics/submodular_maximization/GradientClusters_VAE.png)
+
+The CNN was ultimately selected, as the goal of this study was to compare the performance of the CNN alone.
 
 **A3:**
 TODO add all visualizations from our codebase that are relevant
