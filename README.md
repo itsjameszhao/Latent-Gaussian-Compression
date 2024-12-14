@@ -1,4 +1,5 @@
 # Latent Gaussian Compression (LGC): Dataset Compression and Reconstruction with Autoencoders and Gaussian Mixture Models
+Authors: James Zhao, Blaine Arihara, Emily Tang, and Terry Weber
 
 ## Overview
 
@@ -20,3 +21,4 @@ Traditional compression methods may not preserve essential features for machine 
 Implementations for this project can be found in the \code\ folder.
 
 The Final Project Colab is the bulk of the implementation for this project.
+
