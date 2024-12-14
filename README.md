@@ -18,7 +18,7 @@ Traditional compression methods may not preserve essential features for machine 
 
 ## Source Code
 
-Implementations for this project can be found in the \code\ folder.
+Source code for this project can be found in the \code\ folder.
 
-The Final Project Colab is the bulk of the implementation for this project.
+The _Final_Project_Colab.ipynb_ contains the bulk of the autoencoder implementations for this project.
 
