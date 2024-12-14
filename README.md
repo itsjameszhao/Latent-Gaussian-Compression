@@ -17,4 +17,6 @@ Traditional compression methods may not preserve essential features for machine 
 
 ## Source Code
 
-Implementations for this project can be found in **...\code\**
+Implementations for this project can be found in the \code\ folder.
+
+The Final Project Colab is the bulk of the implementation for this project.
